@@ -3,9 +3,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from torchvision import datasets, transforms, models  # 确保导入 models 模块
-from tca_resnet34 import MineralResNet34  # 导入自定义的TCA-ResNet34模型
-from zhibiao import compute_metrics, plot_confusion_matrix, plot_losses, save_metrics  # 导入指标计算模块中的函数
+from torchvision import datasets, transforms, models 
+from tca_resnet34 import MineralResNet34  
+from zhibiao import compute_metrics, plot_confusion_matrix, plot_losses, save_metrics  
 from sklearn.preprocessing import label_binarize
 import time
 
@@ -13,7 +13,7 @@ import time
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 #print(f"Using device: {device}")  # 打印使用的设备信息以确认配置
 
-# 数据预处理（增加了更多数据增强）
+# 数据预处理
 data_transforms = {
     'train': transforms.Compose([
         transforms.RandomResizedCrop(224),
@@ -169,7 +169,7 @@ def train_model(model, criterion, optimizer, scheduler, dataloaders, dataset_siz
                     best_val_loss = epoch_loss
                     best_model_wts = model.state_dict().copy()
                     epochs_no_improve = 0
-                    torch.save(model.state_dict(), 'best_model.pth')  # 保存整个模型状态而不是仅分类器参数
+                    torch.save(model.state_dict(), 'best_model.pth')  
                     print("Validation loss improved.")
                 else:
                     epochs_no_improve += 1
@@ -207,7 +207,7 @@ if __name__ == '__main__':
     # 创建模型、损失函数和优化器
     model = create_model(num_classes=len(classes))
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=1e-3)  # 调整为优化整个模型的参数
+    optimizer = optim.Adam(model.parameters(), lr=1e-3)  
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5)
 
     # 开始预训练
