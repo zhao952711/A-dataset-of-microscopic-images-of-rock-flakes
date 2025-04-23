@@ -1,10 +1,10 @@
 import os
 import torch
-import numpy as np  # 确保导入 numpy 并指定别名为 np
+import numpy as np
 from torch.utils.data import DataLoader
-from torchvision import transforms, datasets, models  # 确保导入 models 模块
-from tca_resnet34 import MineralResNet34  # 导入自定义的 TCA - ResNet34 模型
-from zhibiao import compute_metrics, plot_confusion_matrix, save_metrics  # 导入指标计算模块中的函数
+from torchvision import transforms, datasets, models 
+from tca_resnet34 import MineralResNet34  
+from zhibiao import compute_metrics, plot_confusion_matrix, save_metrics  
 import time
 
 # 设置设备
@@ -24,7 +24,7 @@ data_transforms = {
 # 定义数据集路径
 data_dir = r'data'
 
-# 中文岩石名称及其对应的英文名称（如果数据集是用中文命名的话）
+# 中文岩石名称及其对应的英文名称
 rock_names = {
     '花岗岩': 'Granite',
     '片麻岩': 'Gneiss',
@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
     # 加载模型
     num_classes = len(classes)
-    model_path = os.path.join('best_model.pth')  # 假设模型权重保存在这里
+    model_path = os.path.join('best_model.pth') 
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model weight file not found at {model_path}. Please check the path.")
 
