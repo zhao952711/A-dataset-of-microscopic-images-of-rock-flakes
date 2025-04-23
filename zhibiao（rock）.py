@@ -42,7 +42,7 @@ def compute_metrics(y_true, y_pred_prob):
     }
 
     try:
-        # 对于多分类问题，roc_auc_score 需要 one-hot 编码的目标值
+        # roc_auc_score 需要 one-hot 编码的目标值
         num_classes = y_pred_prob.shape[1]
         y_true_one_hot = np.eye(num_classes)[y_true]
         metrics['roc_auc'] = roc_auc_score(y_true_one_hot, y_pred_prob, multi_class='ovr')
@@ -85,7 +85,7 @@ def plot_losses(losses, save_path, class_names):
         plt.savefig(total_loss_save_path)
         plt.close()
     else:
-        # 如果没有总损失，跳过绘制总损失图
+        # 跳过绘制总损失图
         total_loss_save_path = None
 
     # 找到任意一个类别损失的长度作为 epochs
