@@ -3,7 +3,7 @@ import torch
 import numpy as np
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets, models
-from tca_resnet34 import MineralResNet34  # 修改为导入 TCA-ResNet34 模型
+from tca_resnet34 import MineralResNet34 
 from zhibiao import compute_metrics, plot_confusion_matrix, save_metrics
 import time
 
