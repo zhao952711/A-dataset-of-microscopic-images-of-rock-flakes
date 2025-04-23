@@ -43,7 +43,7 @@ def compute_metrics(y_true, y_pred_prob):
     }
 
     try:
-        # 对于多分类问题，roc_auc_score 需要 one-hot 编码的目标值
+        # roc_auc_score 需要 one-hot 编码的目标值
         num_classes = y_pred_prob.shape[1]
         y_true_one_hot = np.eye(num_classes)[y_true]
         metrics['roc_auc'] = roc_auc_score(y_true_one_hot, y_pred_prob, multi_class='ovr')
@@ -77,7 +77,7 @@ def plot_losses(losses, save_path, class_names):
         plt.figure(figsize=(10, 6))
         plt.plot(epochs, losses['total'], label='Total Loss', color='red')
     else:
-        # 当没有总损失时，找到任意一个类别损失的长度作为 epochs
+        # 找到任意一个类别损失的长度作为 epochs
         first_key = next(iter(losses))
         epochs = range(1, len(losses[first_key]) + 1)
         plt.figure(figsize=(10, 6))
@@ -122,5 +122,4 @@ def save_metrics(metrics, epoch, save_path, classes):
 
 
 if __name__ == '__main__':
-    # 如果有主程序逻辑，可以在这里添加
     pass    
