@@ -4,8 +4,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms, models  
-from tca_resnet34 import MineralResNet34  # 导入自定义的TCA - ResNet34模型
-from zhibiao import compute_metrics, plot_confusion_matrix, plot_losses, save_metrics  # 导入指标计算模块中的函数
+from tca_resnet34 import MineralResNet34  
+from zhibiao import compute_metrics, plot_confusion_matrix, plot_losses, save_metrics  
 from sklearn.preprocessing import label_binarize
 import time
 
@@ -13,7 +13,7 @@ import time
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 #print(f"Using device: {device}")  # 打印使用的设备信息以确认配置
 
-# 数据预处理（增加了更多数据增强）
+# 数据预处理
 data_transforms = {
     'train': transforms.Compose([
         transforms.RandomResizedCrop(224),
@@ -137,7 +137,7 @@ def train_model(model, criterion, optimizer, scheduler, dataloaders, dataset_siz
                     class_loss = nn.BCELoss()(torch.from_numpy(all_probs_array[:, i]).float().to(device), class_labels).item()
                     losses[f'class_{i}'].append(class_loss)
 
-                metrics = compute_metrics(all_labels, all_probs_array)  # 注意这里传入的是概率预测
+                metrics = compute_metrics(all_labels, all_probs_array)  
 
                 # 添加每个类别的损失到metrics字典中
                 for i in range(len(classes)):
@@ -167,7 +167,7 @@ def train_model(model, criterion, optimizer, scheduler, dataloaders, dataset_siz
                     best_val_loss = epoch_loss
                     best_model_wts = model.state_dict().copy()
                     epochs_no_improve = 0
-                    torch.save(model.state_dict(), 'best_model.pth')  # 保存整个模型状态而不是仅分类器参数
+                    torch.save(model.state_dict(), 'best_model.pth')  
                     print("Validation loss improved.")
                 else:
                     epochs_no_improve += 1
