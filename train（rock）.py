@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from torchvision import datasets, transforms, models  # 确保导入 models 模块
+from torchvision import datasets, transforms, models  
 from tca_resnet34 import MineralResNet34  # 导入自定义的TCA - ResNet34模型
 from zhibiao import compute_metrics, plot_confusion_matrix, plot_losses, save_metrics  # 导入指标计算模块中的函数
 from sklearn.preprocessing import label_binarize
