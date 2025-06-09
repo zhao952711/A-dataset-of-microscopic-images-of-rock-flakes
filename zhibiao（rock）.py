@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 rock_names = {
     '花岗岩': 'Granite',
     '片麻岩': 'Gneiss',
@@ -14,7 +15,7 @@ rock_names = {
     '凝灰岩': 'Tuff',
     '砂岩': 'Sandstone',
     '辉长岩': 'Gabbro',
-    '玄武岩': 'Basalt'
+    '玄武岩': 'Basalt',
 }
 
 
@@ -42,7 +43,7 @@ def compute_metrics(y_true, y_pred_prob):
     }
 
     try:
-        # roc_auc_score 需要 one-hot 编码的目标值
+        
         num_classes = y_pred_prob.shape[1]
         y_true_one_hot = np.eye(num_classes)[y_true]
         metrics['roc_auc'] = roc_auc_score(y_true_one_hot, y_pred_prob, multi_class='ovr')
@@ -54,11 +55,11 @@ def compute_metrics(y_true, y_pred_prob):
 
 
 def plot_confusion_matrix(cm, classes, save_path):
-    # 计算每个真实类别的样本总数
+    
     total_samples_per_class = cm.sum(axis=1, keepdims=True)
-    # 避免除零错误
+    
     total_samples_per_class[total_samples_per_class == 0] = 1
-    # 计算每个类别的预测概率
+    
     cm_percentage = cm / total_samples_per_class
 
     plt.figure(figsize=(10, 8))
@@ -85,26 +86,32 @@ def plot_losses(losses, save_path, class_names):
         plt.savefig(total_loss_save_path)
         plt.close()
     else:
-        # 跳过绘制总损失图
+        # 如果没有总损失，跳过绘制总损失图
         total_loss_save_path = None
 
     # 找到任意一个类别损失的长度作为 epochs
     first_key = next(iter(losses))
     epochs = range(1, len(losses[first_key]) + 1)
 
+    # 反转 rock_names 映射（英文到中文）
+    english_to_chinese = {v: k for k, v in rock_names.items()}
+    
     # 绘制每个类别分别的损失函数图
     plt.figure(figsize=(10, 6))
     for label, loss in losses.items():
         if label != 'total':
-            class_index = int(label.split('_')[1])
-            if class_index < len(class_names):
-                class_name = class_names[class_index]
+            
+            class_english_name = label.split('_')[0]
+            if class_english_name in english_to_chinese:
+                class_name = english_to_chinese[class_english_name]  # 转为中文名称
                 plt.plot(epochs, loss, label=class_name, linestyle='--')
+    
     if any(losses.values()):  # 检查是否有有效的损失数据
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
         plt.title('Class-wise Rock Thin Section Classification Loss Function')
         plt.legend()
+    
     class_wise_loss_save_path = os.path.join(os.path.dirname(save_path), "class_wise_loss_" + os.path.basename(save_path))
     plt.savefig(class_wise_loss_save_path)
     plt.close()
@@ -122,7 +129,7 @@ def save_metrics(metrics, epoch, save_path, classes):
         # 写入其他指标
         for key, value in metrics.items():
             if key != 'confusion_matrix' and key not in classes:
-                file.write(f"{key}: {value:.4f}\n")  # 格式化浮点数为小数点后四位
+                file.write(f"{key}: {value:.4f}\n")  
 
         # 写入每个类别的损失
         for class_name in classes:
