@@ -1,9 +1,9 @@
 import os
 import torch
-import numpy as np
+import numpy as np  
 from torch.utils.data import DataLoader
-from torchvision import transforms, datasets, models 
-from tca_resnet34 import MineralResNet34  
+from torchvision import transforms, datasets, models  
+from tca_resnet34 import MineralResNet34 
 from zhibiao import compute_metrics, plot_confusion_matrix, save_metrics  
 import time
 
@@ -11,7 +11,7 @@ import time
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")  # 打印使用的设备信息以确认配置
 
-# 数据预处理（与 train.py 中 'val' 阶段一致）
+# 数据预处理
 data_transforms = {
     'test': transforms.Compose([
         transforms.Resize(256),
@@ -40,13 +40,13 @@ rock_names = {
 
 def prepare_test_data():
     test_dataset = datasets.ImageFolder(os.path.join(data_dir, 'test'), data_transforms['test'])
-    test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=4)  # 使用与训练时相同的 batch_size
+    test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=4)  
     return test_loader, test_dataset.classes
 
 
 def load_model(num_classes, model_path):
     # 创建模型实例，并加载预训练的 ImageNet 权重
-    model = MineralResNet34(num_classes=num_classes, weights=models.ResNet34_Weights.IMAGENET1K_V1, freeze_conv=True)
+    model = MineralResNet34 (num_classes=num_classes, weights=models.ResNet34_Weights.IMAGENET1K_V1, freeze_conv=True)
     model = model.to(device)
 
     # 加载整个模型的状态字典
@@ -89,7 +89,7 @@ def evaluate_model(model, dataloader, classes):
     for key, value in metrics.items():
         if key == 'confusion_matrix':
             print(f"{key}:\n{value}")
-            cm_image_path = os.path.join('zhibiao/hunxiao', f'confusion_matrix_test.png')
+            cm_image_path = os.path.join('zhibiao/hunxiao', f'test_confusion_matrix.png')
             os.makedirs(os.path.dirname(cm_image_path), exist_ok=True)
             plot_confusion_matrix(value, classes, cm_image_path)  # 绘制并保存混淆矩阵
         elif key == 'test_time':
@@ -98,7 +98,7 @@ def evaluate_model(model, dataloader, classes):
             print(f"{key}: {value}")
 
     # 保存评估结果
-    save_metrics(metrics, 'Test', 'test_parameters.txt', classes)
+    save_metrics(metrics, 'Test', 'tca_resnet34_test_parameters.txt', classes)
 
     print("Model evaluation completed.")
 
@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
     # 加载模型
     num_classes = len(classes)
-    model_path = os.path.join('best_model.pth') 
+    model_path = os.path.join('tca_resnet34_best_model.pth')  
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model weight file not found at {model_path}. Please check the path.")
 
