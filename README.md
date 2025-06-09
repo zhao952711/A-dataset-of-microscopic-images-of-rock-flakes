@@ -1,3 +1,3 @@
-# A-dataset-of-microscopic-images-of-rock-mineral-flakes
+# A-dataset-of-microscopic-images-of-rock-flakes
 
 
