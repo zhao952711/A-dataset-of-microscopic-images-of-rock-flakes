@@ -42,7 +42,7 @@ class CA_ResBlock(nn.Module):
 
 
 class MineralResNet34(nn.Module):
-    def __init__(self, num_classes=10, weights=models.ResNet34_Weights.IMAGENET1K_V1, freeze_conv=True):
+    def __init__(self, num_classes=9, weights=models.ResNet34_Weights.IMAGENET1K_V1, freeze_conv=True):
         super(MineralResNet34, self).__init__()
 
         # 加载预训练的ResNet34模型，并使用weights参数
